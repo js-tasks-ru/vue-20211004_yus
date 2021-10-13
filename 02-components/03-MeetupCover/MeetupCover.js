@@ -1,10 +1,32 @@
 import { defineComponent } from './vendor/vue.esm-browser.js';
 
 export default defineComponent({
-  name: 'MeetupCover',
+    name: 'MeetupCover',
 
-  template: `
-    <div class="meetup-cover" style="--bg-url: url('https://course-vue.javascript.ru/api/images/2')">
-        <h1 class="meetup-cover__title">Title</h1>
-    </div>`,
+    props: {
+        title: {
+            type: String,
+        },
+
+        image: {
+            type: String,
+        },
+    },
+
+    computed: {
+        coverStyle() {
+            let style = {};
+
+            if (this.image) {
+                style['--bg-url'] = `url(${this.image})`;
+            }
+
+            return style;
+        },
+    },
+
+    template: `
+        <div class="meetup-cover" :style="coverStyle">
+        <h1 class="meetup-cover__title">{{ title }}</h1>
+        </div>`,
 });
