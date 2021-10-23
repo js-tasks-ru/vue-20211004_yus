@@ -28,7 +28,6 @@ export default {
     data() {
         return {
             toasts: {},
-            timers: {},
             toastKey: 0,
         };
     },
@@ -100,6 +99,16 @@ export default {
         deleteToast(key) {
             delete this.toasts[key];
         },
+
+        deleteAllTimers() {
+            for (let key in this.toasts) {
+                this.deleteTimer(key);
+            }
+        },
+    },
+
+    beforeUnmount() {
+        this.deleteAllTimers();
     },
 };
 </script>
