@@ -1,7 +1,7 @@
 <template>
     <div
         class="input-group"
-        :class="mainBlockClass"
+        :class="mainBlockClass()"
     >
         <div
             v-if="$slots['left-icon']"
@@ -10,24 +10,15 @@
             <slot name="left-icon"></slot>
         </div>
 
-        <textarea
-            v-if="multiline"
+        <component
             v-bind="$attrs"
-            :value="modelValue"
-            @[fieldEvent]="$emit('update:modelValue', $event.target.value)"
-            ref="input"
-            class="form-control"
-        ></textarea>
-
-        <input
-            v-else
+            :is="inputComponent"
             :class="inputClass"
-            v-bind="$attrs"
             :value="modelValue"
             @[fieldEvent]="$emit('update:modelValue', $event.target.value)"
             ref="input"
             class="form-control"
-        />
+        ></component>
 
         <div
             v-if="$slots['right-icon']"
@@ -69,6 +60,10 @@ export default {
     },
 
     computed: {
+        inputComponent() {
+            return this.multiline ? 'textarea' : 'input';
+        },
+
         fieldEvent() {
             return this.modelModifiers.lazy ? 'change' : 'input';
         },
@@ -78,6 +73,12 @@ export default {
                 'form-control_sm': this.small,
                 'form-control_rounded': this.rounded,
             };
+        },
+    },
+
+    methods: {
+        focus() {
+            this.$refs.input.focus();
         },
 
         mainBlockClass() {
@@ -89,12 +90,6 @@ export default {
                 'input-group_icon-left': existLeftIcon,
                 'input-group_icon-right': existRightIcon,
             };
-        },
-    },
-
-    methods: {
-        focus() {
-            this.$refs.input.focus();
         },
     },
 };
